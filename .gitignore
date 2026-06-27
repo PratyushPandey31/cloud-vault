@@ -11,5 +11,8 @@ PROJECT_REPORT.pdf
 *.log
 dist/
 .env
+.env.local
+.env.*.local
+backend/.env
 .DS_Store
 Thumbs.db
