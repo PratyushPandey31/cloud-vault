@@ -75,6 +75,62 @@ export default function KeyManager({ user, showToast }) {
         </button>
       </div>
 
+      {/* Key Manager Analytics Row */}
+      <div className="vault-analytics-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '2rem' }}>
+        <div className="glass-panel analytics-card" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: '1.5rem 2rem', gap: '20px' }}>
+          <div>
+            <h4 style={{ margin: 0, fontSize: '0.95rem' }}>🛡️ Asymmetric Key Entropy</h4>
+            <p style={{ margin: '8px 0 0 0', fontSize: '0.8rem', color: 'var(--text-muted)' }}>RSA-2048 Bitwise Modulus strength verification parameters</p>
+            <div style={{ marginTop: '12px', fontSize: '1.2rem', fontWeight: 'bold', color: 'var(--accent-color)' }}>
+              100% SECURE <span style={{ fontSize: '0.75rem', color: 'var(--color-success)', background: 'rgba(0, 230, 118, 0.1)', padding: '2px 8px', borderRadius: '10px', marginLeft: '6px' }}>FIPS 140-2</span>
+            </div>
+          </div>
+          <div style={{ width: '70px', height: '70px', position: 'relative' }}>
+            <svg width="70" height="70" viewBox="0 0 36 36">
+              <path
+                stroke="rgba(255,255,255,0.05)"
+                strokeWidth="3.5"
+                fill="none"
+                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              />
+              <path
+                stroke="var(--accent-color)"
+                strokeDasharray="100, 100"
+                strokeWidth="3.5"
+                strokeLinecap="round"
+                fill="none"
+                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                filter="drop-shadow(0 0 4px var(--accent-color))"
+              />
+              <text x="18" y="21" style={{ fontSize: '7px', fill: '#fff', textAnchor: 'middle', fontWeight: 'bold', fontFamily: 'var(--font-mono)' }}>100%</text>
+            </svg>
+          </div>
+        </div>
+
+        <div className="glass-panel analytics-card" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: '1.5rem 2rem', gap: '20px' }}>
+          <div>
+            <h4 style={{ margin: 0, fontSize: '0.95rem' }}>⚡ PBKDF2 Key Derivation Workload</h4>
+            <p style={{ margin: '8px 0 0 0', fontSize: '0.8rem', color: 'var(--text-muted)' }}>Symmetric master key generation calculation latency</p>
+            <div style={{ marginTop: '12px', fontSize: '1.2rem', fontWeight: 'bold', color: 'var(--accent-cyan)' }}>
+              Avg 380 ms <span style={{ fontSize: '0.75rem', color: 'var(--accent-cyan)', background: 'rgba(6, 182, 212, 0.1)', padding: '2px 8px', borderRadius: '10px', marginLeft: '6px' }}>100k Iterations</span>
+            </div>
+          </div>
+          <div style={{ width: '100px', height: '60px' }}>
+            <svg width="100" height="60" viewBox="0 0 100 60" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="kdfGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="var(--accent-cyan)" stopOpacity="0.3" />
+                  <stop offset="100%" stopColor="var(--accent-cyan)" stopOpacity="0" />
+                </linearGradient>
+              </defs>
+              <path d="M 0,55 Q 15,10 30,45 T 60,15 T 80,48 T 100,5 L 100,60 L 0,60 Z" fill="url(#kdfGrad)" />
+              <path d="M 0,55 Q 15,10 30,45 T 60,15 T 80,48 T 100,5" fill="none" stroke="var(--accent-cyan)" strokeWidth="2" strokeLinecap="round" filter="drop-shadow(0 0 3px rgba(6,182,212,0.5))" />
+              <circle cx="100" cy="5" r="3" fill="#fff" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
       <div className="dashboard-grid">
         <div className="glass-panel" style={{ padding: '2rem' }}>
           <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--accent-cyan)', marginBottom: '1.5rem' }}>

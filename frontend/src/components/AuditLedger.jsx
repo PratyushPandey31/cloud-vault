@@ -175,6 +175,67 @@ export default function AuditLedger({ token, API_URL, onLogUpdate, showToast }) 
         )}
       </div>
 
+      {/* Blockchain Integrity Map visualization */}
+      {logs.length > 0 && (
+        <div className="glass-panel" style={{ padding: '1.5rem', marginBottom: '2rem', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <h4 style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', margin: 0, textTransform: 'uppercase', letterSpacing: '0.5px' }}>🔗 Hash-Pointer Blockchain Visualization Map</h4>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', overflowX: 'auto', padding: '10px 0' }}>
+            {logs.slice(0, 6).map((log, idx) => {
+              const isVerified = verifiedBlockIds.includes(log.id);
+              const isCompromised = verificationReport && !verificationReport.report.find(r => r.id === log.id)?.is_valid;
+              
+              let boxColor = 'rgba(255,255,255,0.02)';
+              let borderCol = 'var(--border-glass)';
+              let textColor = 'var(--text-secondary)';
+              let statusText = 'PENDING';
+
+              if (isVerified && !isCompromised) {
+                boxColor = 'rgba(0, 230, 118, 0.05)';
+                borderCol = 'rgba(0, 230, 118, 0.4)';
+                textColor = 'var(--color-success)';
+                statusText = 'SECURE';
+              } else if (isCompromised) {
+                boxColor = 'rgba(255, 23, 68, 0.08)';
+                borderCol = 'var(--color-danger)';
+                textColor = 'var(--color-danger)';
+                statusText = 'TAMPERED';
+              } else if (verifying) {
+                boxColor = 'rgba(255, 196, 0, 0.05)';
+                borderCol = 'rgba(255, 196, 0, 0.4)';
+                textColor = '#ffc400';
+                statusText = 'VERIFYING';
+              }
+
+              return (
+                <React.Fragment key={log.id}>
+                  {idx > 0 && (
+                    <div style={{ fontSize: '1.2rem', color: isCompromised ? 'var(--color-danger)' : (isVerified ? 'var(--color-success)' : 'rgba(255,255,255,0.1)') }}>
+                      {isCompromised ? '⚡' : '➔'}
+                    </div>
+                  )}
+                  <div style={{ 
+                    flex: '1 0 100px', 
+                    background: boxColor, 
+                    border: `1.5px solid ${borderCol}`, 
+                    borderRadius: '8px', 
+                    padding: '10px', 
+                    textAlign: 'center', 
+                    minWidth: '105px', 
+                    boxShadow: isVerified && !isCompromised ? '0 0 10px rgba(0, 230, 118, 0.1)' : (isCompromised ? '0 0 15px rgba(255, 23, 68, 0.2)' : 'none')
+                  }}>
+                    <div style={{ fontSize: '0.62rem', fontWeight: 'bold', color: 'var(--text-muted)' }}>BLOCK #{log.id}</div>
+                    <div style={{ fontSize: '0.72rem', fontWeight: 800, color: textColor, margin: '4px 0' }}>{statusText}</div>
+                    <div style={{ fontSize: '0.55rem', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {log.log_hash.substring(0, 8)}...
+                    </div>
+                  </div>
+                </React.Fragment>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {logs.length === 0 ? (
         <div className="glass-panel" style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
           <span style={{ fontSize: '3rem' }}>📜</span>
