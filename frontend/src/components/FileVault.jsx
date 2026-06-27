@@ -422,20 +422,52 @@ export default function FileVault({ user, token, API_URL, onLogUpdate, showToast
           </div>
         </div>
 
-        <div className="glass-panel analytics-card">
+        <div className="glass-panel analytics-card" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
           <h4>⚡ Crypto-Engine Throughput</h4>
-          <div className="speed-waves">
-            <div className="wave-bar"></div>
-            <div className="wave-bar"></div>
-            <div className="wave-bar"></div>
-            <div className="wave-bar"></div>
-            <div className="wave-bar"></div>
-            <div className="wave-bar"></div>
-            <div className="wave-bar"></div>
+          <div style={{ position: 'relative', width: '100%', height: '70px', overflow: 'hidden', margin: '5px 0' }}>
+            <svg width="100%" height="100%" viewBox="0 0 240 70" preserveAspectRatio="none" style={{ display: 'block' }}>
+              <defs>
+                <linearGradient id="cryptoChartGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="var(--accent-cyan)" stopOpacity="0.4" />
+                  <stop offset="100%" stopColor="var(--accent-cyan)" stopOpacity="0" />
+                </linearGradient>
+              </defs>
+              
+              {/* Grid Lines */}
+              <line x1="0" y1="15" x2="240" y2="15" stroke="rgba(255,255,255,0.03)" strokeWidth="1" strokeDasharray="4 4" />
+              <line x1="0" y1="35" x2="240" y2="35" stroke="rgba(255,255,255,0.03)" strokeWidth="1" strokeDasharray="4 4" />
+              <line x1="0" y1="55" x2="240" y2="55" stroke="rgba(255,255,255,0.03)" strokeWidth="1" strokeDasharray="4 4" />
+              
+              {/* Chart Path Area */}
+              <path
+                d="M 0,65 Q 20,40 40,55 T 80,25 T 120,48 T 160,18 T 200,35 T 240,15 L 240,70 L 0,70 Z"
+                fill="url(#cryptoChartGrad)"
+              />
+              
+              {/* Chart Line */}
+              <path
+                d="M 0,65 Q 20,40 40,55 T 80,25 T 120,48 T 160,18 T 200,35 T 240,15"
+                fill="none"
+                stroke="var(--accent-cyan)"
+                strokeWidth="2"
+                strokeLinecap="round"
+                filter="drop-shadow(0 0 4px rgba(6,182,212,0.6))"
+              />
+              
+              {/* Glowing Pulse Dot at end of graph */}
+              <circle cx="240" cy="15" r="4" fill="#ffffff" />
+              <circle cx="240" cy="15" r="8" fill="var(--accent-cyan)" opacity="0.6">
+                <animate attributeName="r" values="4;10;4" dur="1.5s" repeatCount="indefinite" />
+                <animate attributeName="opacity" values="0.8;0.2;0.8" dur="1.5s" repeatCount="indefinite" />
+              </circle>
+            </svg>
+            <div style={{ position: 'absolute', top: '2px', right: '5px', fontSize: '0.62rem', fontFamily: 'var(--font-mono)', color: 'var(--accent-cyan)', background: 'rgba(6, 182, 212, 0.1)', padding: '1px 5px', borderRadius: '4px', border: '1px solid rgba(6,182,212,0.2)' }}>
+              LIVE MONITOR
+            </div>
           </div>
           <div className="gauge-stats">
-            <span>Avg Encryption: <strong>420 MB/s</strong></span>
-            <span>Wrap Latency: <strong>12ms</strong></span>
+            <span>Avg Encryption: <strong style={{ color: 'var(--accent-cyan)' }}>420 MB/s</strong></span>
+            <span>Wrap Latency: <strong style={{ color: 'var(--accent-cyan)' }}>12ms</strong></span>
           </div>
         </div>
       </div>
