@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Report - CloudVault Framework</title>
+    <style>
+        :root {
+            --primary: #5d3fd3;
+            --secondary: #06b6d4;
+            --dark: #0f121d;
+            --gray: #f4f5f7;
+            --text: #2d3748;
+            --text-muted: #718096;
+            --border: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text);
+            line-height: 1.6;
+            padding: 0;
+            background: #ffffff;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+
+        /* Page Break Rules */
+        .page {
+            page-break-after: always;
+            position: relative;
+            min-height: 100vh;
+            padding-bottom: 50px;
+        }
+
+        .page:last-child {
+            page-break-after: avoid;
+        }
+
+        /* Cover Page Styling */
+        .cover-page {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+            height: 95vh;
+            padding: 60px 20px;
+        }
+
+        .cover-header h3 {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .cover-title {
+            margin: auto 0;
+        }
+
+        .cover-title h1 {
+            font-size: 2.2rem;
+            color: var(--dark);
+            font-weight: 800;
+            line-height: 1.25;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            border-bottom: 4px solid var(--primary);
+            padding-bottom: 20px;
+        }
+
+        .cover-title h2 {
+            font-size: 1.2rem;
+            color: var(--primary);
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .cover-details {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid var(--border);
+            padding-top: 30px;
+            text-align: left;
+        }
+
+        .detail-block h4 {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .detail-block p {
+            font-size: 1rem;
+            font-weight: bold;
+            color: var(--dark);
+        }
+
+        /* Content Pages Styling */
+        h2.section-title {
+            font-size: 1.6rem;
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+            margin-top: 30px;
+            text-transform: uppercase;
+        }
+
+        h3.subsection-title {
+            font-size: 1.15rem;
+            color: var(--dark);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            border-left: 4px solid var(--secondary);
+            padding-left: 10px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+            font-size: 1rem;
+        }
+
+        ul, ol {
+            margin-bottom: 20px;
+            margin-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        /* Code Block Styling */
+        pre {
+            background: var(--gray);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+
+        /* Diagrams styling */
+        .diagram-box {
+            background: #fafafa;
+            border: 1px dashed var(--text-muted);
+            border-radius: 8px;
+            padding: 20px;
+            font-family: monospace;
+            font-size: 0.8rem;
+            line-height: 1.4;
+            white-space: pre;
+            overflow-x: auto;
+            margin: 20px 0;
+            color: var(--dark);
+        }
+
+        /* Table styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 25px;
+            margin-top: 15px;
+        }
+
+        table th, table td {
+            border: 1px solid var(--border);
+            padding: 10px 12px;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        table th {
+            background-color: var(--gray);
+            color: var(--dark);
+            font-weight: bold;
+        }
+
+        /* Print Media Queries */
+        @media print {
+            body {
+                background: #ffffff;
+                color: #000000;
+            }
+            .container {
+                width: 100%;
+                max-width: 100%;
+                padding: 0;
+            }
+            .page {
+                page-break-after: always;
+                min-height: auto;
+            }
+            .page:last-child {
+                page-break-after: avoid;
+            }
+            pre {
+                white-space: pre-wrap;
+                word-wrap: break-word;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    
+    <!-- PAGE 1: COVER PAGE -->
+    <div class="page cover-page">
+        <div class="cover-header">
+            <h3>Capstone Project Report</h3>
+            <p>Subject: Cloud Computing & Virtualization Security (VCS-601)</p>
+        </div>
+        
+        <div class="cover-title">
+            <h1>Zero-Knowledge Multi-Tenant Vault & Container Isolation Framework</h1>
+            <h2>Security Controls & Forensics Logs Integration</h2>
+        </div>
+
+        <div class="cover-details">
+            <div class="detail-block">
+                <h4>Submitted By</h4>
+                <p>Pratyush Pandey</p>
+                <p>Roll No: [Your Roll Number]</p>
+            </div>
+            <div class="detail-block" style="text-align: right;">
+                <h4>Submitted To</h4>
+                <p>Department of Computer Science</p>
+                <p>Project Supervisor / HOD</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 2: ABSTRACT & INTRODUCTION -->
+    <div class="page">
+        <h2 class="section-title">1. Abstract</h2>
+        <p>
+            In shared cloud virtualization and Kubernetes environments, co-located container modules present major horizontal security threats. Compromised virtualized guest machines or root-level host logins allow malicious actors to perform sidechannel memory reads, intercept database storage files, and view sensitive tenant assets. Default cloud databases store files directly in plaintext or rely on server-side decryption keys, rendering them completely exposed to server database tampering.
+        </p>
+        <p>
+            To address these core vulnerabilities, this project implements <strong>CloudVault</strong>, a high-fidelity Zero-Knowledge hybrid cryptography storage vault and container security microsegmentation network. Using browser-bound key derivation (PBKDF2) and in-memory Web Crypto APIs, files are fully encrypted locally on client devices using AES-GCM-256 before ingestion, while symmetric key wrap delegates are sealed via RSA-OAEP-2048. Additionally, the system incorporates eBPF-simulated container microsegmentation to block cross-namespace bypass attempts, and an immutable forensic ledger using block-chain hash pointers to audit transactions and detect unauthorized database alterations.
+        </p>
+
+        <h2 class="section-title">2. Introduction</h2>
+        <p>
+            Cloud computing architectures partition hardware resources dynamically among multiple tenants. Despite namespace isolation, hypervisors and host file systems are susceptible to host database modifications. Standard security protocols depend heavily on firewalls and peripheral access checks; however, if the underlying database is compromised, the confidentiality and integrity of all user assets are lost. 
+        </p>
+        <p>
+            This project focuses on executing zero-trust bounds across the storage, cryptographic identity, container networks, and audit ledger components. A fully responsive glassmorphic React dashboard acts as the visualization interface, demonstrating the cryptographic visualizer logs, interactive cluster maps, and automated compliance scan reports.
+        </p>
+    </div>
+
+    <!-- PAGE 3: SYSTEM DESIGN & ARCHITECTURE -->
+    <div class="page">
+        <h2 class="section-title">3. System Architecture</h2>
+        <p>
+            The project employs a secure, decoupled three-tier architecture ensuring zero key exposure to backend environments. Below is a detailed map of the cryptographic data flow and client-server boundaries:
+        </p>
+
+        <div class="diagram-box">
++---------------------------------------------------------------------------------+
+|                                 CLIENT BROWSER                                  |
+|                                                                                 |
+|  [ User Password ] ---> PBKDF2 (100k rounds) ---> AES Symmetric Master Key       |
+|                                                          |                      |
+|                                              Decrypts Local Identity            |
+|                                                          v                      |
+|                                            [ RSA-2048 Private Key ]             |
+|                                            (Kept Locked in memory)              |
+|                                                                                 |
+|  [ Raw File Upload ] ---> Encrypted locally via AES-GCM ---> Uploads Ciphertext |
+|                                                                                 |
++----------------------------------------|----------------------------------------+
+                                         | Secure Ingestion (POST)
+                                         v
++---------------------------------------------------------------------------------+
+|                                 EXPRESS BACKEND                                 |
+|                                                                                 |
+|   /api/files/upload  ---> Stores encrypted binary payload in /uploads folder     |
+|   /api/files/share   ---> Maps wrapped AES key shares inside database           |
+|                                                                                 |
++----------------------------------------|----------------------------------------+
+                                         | Persistence
+                                         v
++---------------------------------------------------------------------------------+
+|                                SQLITE DATABASE                                  |
+|                                                                                 |
+|   Table: file_shares  ---> Holds encrypted keys unique to recipient public JWKs |
+|   Table: audit_logs   ---> Chained transactions linked via SHA-256 hash codes   |
++---------------------------------------------------------------------------------+
+        </div>
+
+        <h3 class="subsection-title">Data Schema and Specifications</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Security Component</th>
+                    <th>Algorithm Used</th>
+                    <th>Bit Length / Iterations</th>
+                    <th>Security Purpose</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Key Derivation (KDF)</td>
+                    <td>PBKDF2-HMAC-SHA256</td>
+                    <td>100,000 Rounds / 128-bit Salt</td>
+                    <td>Derives the local master key from password to secure RSA private keys.</td>
+                </tr>
+                <tr>
+                    <td>Symmetric Cipher</td>
+                    <td>AES-GCM (Galois/Counter Mode)</td>
+                    <td>256-bit Key / 96-bit IV</td>
+                    <td>Encrypts file payload binary streams before uploading. Ensures integrity.</td>
+                </tr>
+                <tr>
+                    <td>Asymmetric Cipher</td>
+                    <td>RSA-OAEP</td>
+                    <td>2048-bit Key size</td>
+                    <td>Uniquely registers client nodes, wrapping symmetric AES keys for shares.</td>
+                </tr>
+                <tr>
+                    <td>Ledger Auditing</td>
+                    <td>SHA-256 Hashing</td>
+                    <td>256-bit digest output</td>
+                    <td>Chains audit logs back to block 0 using blockchain pointers.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- PAGE 4: IMPLEMENTATION & CRYPTO CODES -->
+    <div class="page">
+        <h2 class="section-title">4. Core Implementation Highlights</h2>
+        
+        <h3 class="subsection-title">A. Local Client-Side Key Derivation</h3>
+        <p>
+            The master symmetric key is derived inside the client's browser, preventing the plaintext password from ever leaving the frontend:
+        </p>
+        <pre>
+async function deriveKeyFromPassword(password, salt) {
+  const baseKey = await window.crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(password),
+    { name: "PBKDF2" },
+    false,
+    ["deriveKey"]
+  );
+
+  return window.crypto.subtle.deriveKey(
+    {
+      name: "PBKDF2",
+      salt: new TextEncoder().encode(salt),
+      iterations: 100000,
+      hash: "SHA-256"
+    },
+    baseKey,
+    { name: "AES-GCM", length: 256 },
+    false,
+    ["encrypt", "decrypt"]
+  );
+}
+        </pre>
+
+        <h3 class="subsection-title">B. Cryptographic Audit Ledger Chaining</h3>
+        <p>
+            When transaction events are triggered, the server computes the block hash by linking metadata to the previous record's hash signature:
+        </p>
+        <pre>
+const logHash = crypto
+  .createHash('sha256')
+  .update(`${timestamp}|${event_type}|${user_id}|${username}|${details}|${prev_hash}`)
+  .digest('hex');
+
+// Insert transaction as an immutable node
+await db.run(
+  `INSERT INTO audit_logs (timestamp, event_type, user_id, username, details, prev_hash, log_hash)
+   VALUES (?, ?, ?, ?, ?, ?, ?)`
+);
+        </pre>
+    </div>
+
+    <!-- PAGE 5: ZERO TRUST & RESULTS -->
+    <div class="page">
+        <h2 class="section-title">5. Results & Visual Verification</h2>
+
+        <h3 class="subsection-title">A. Zero-Knowledge File Decryption Preview</h3>
+        <p>
+            When downloading the pre-seeded file <code>secure_blueprint.png</code>, the system fetches the encrypted binary bytes, unwraps the symmetric AES-GCM key inside JavaScript memory, decrypts it, and displays the image payload immediately on screen inside the visualizer panel.
+        </p>
+
+        <h3 class="subsection-title">B. Dynamic eBPF CNI Container Segmentation</h3>
+        <p>
+            The system maps Kubernetes container network boundaries dynamically:
+        </p>
+        <ul>
+            <li><strong>With Microsegmentation Active</strong>: Ingress rules drop attack packets immediately at CNI boundaries. Logs indicate eBPF filters dropping unauthorized namespace bypass attempts.</li>
+            <li><strong>With Microsegmentation Inactive</strong>: Attack packets breach database boundaries, allowing data leakage simulation.</li>
+        </ul>
+
+        <h3 class="subsection-title">C. Forensic Integrity Scans</h3>
+        <p>
+            If a host-level attacker alters SQL records directly (simulated in SQLite database), the ledger verification checks fail:
+        </p>
+        <div class="diagram-box" style="background: rgba(255, 61, 0, 0.05); border-color: red; color: red;">
+🚨 DETECTED TAMPERING AT BLOCK #4
+Expected hash: 8f2a41ff51c22be3f1e948c2b516104f2c5d...
+Calculated hash: d3c12ff31405e679234b6cd58c97e123...
+Result: LEDGER CHAIN BROKEN - COMPROMISED SYSTEM STATE!
+        </div>
+
+        <h2 class="section-title">6. Conclusion & Recommendations</h2>
+        <p>
+            This Capstone project successfully establishes a Zero-Knowledge multi-tenant environment suitable for modern containerized architectures. By implementing client-bound key wrappers, co-located container workloads are decoupled, and host database tampering is immediately exposed. 
+        </p>
+        <p>
+            For production deployment, it is highly recommended to integrate:
+        </p>
+        <ol>
+            <li>Hardware Security Modules (HSMs) or WebAuthn bounds for public key validation.</li>
+            <li>Dynamic eBPF logging via actual Cilium network policies inside live clusters.</li>
+            <li>Double-envelope ciphers for large multi-gigabyte data packages.</li>
+        </ol>
+    </div>
+
+</div>
+
+</body>
+</html>
