@@ -1,0 +1,10 @@
+node_modules/
+backend/uploads/*
+!backend/uploads/demo-financials
+.system_generated/
+.gemini/
+*.log
+dist/
+.env
+.DS_Store
+Thumbs.db
