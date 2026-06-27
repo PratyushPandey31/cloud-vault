@@ -40,7 +40,7 @@
             page-break-after: always;
             position: relative;
             min-height: 100vh;
-            padding: 40px 0;
+            padding: 40px 0 60px 0; /* Add bottom padding for footer */
             border-bottom: 1px dashed var(--border);
         }
 
@@ -115,6 +115,46 @@
             font-weight: bold;
             color: var(--dark);
             margin-bottom: 2px;
+        }
+
+        /* Page Header & Footer Styles */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+            margin-bottom: 25px;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .page-header .header-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .page-header img {
+            width: 22px;
+            height: 22px;
+            border-radius: 4px;
+        }
+
+        .page-footer {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid var(--border);
+            padding-top: 8px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
         }
 
         /* Typography & Headers */
@@ -246,7 +286,7 @@
                 page-break-after: always;
                 min-height: auto;
                 border-bottom: none;
-                padding: 20px 0;
+                padding: 20px 0 65px 0;
             }
             .page:last-child {
                 page-break-after: avoid;
@@ -274,7 +314,7 @@
     <div class="page cover-page">
         <div class="cover-header">
             <h3>Capstone Thesis / Project Report</h3>
-            <p>Subject: Cloud Computing & Virtualization Security (VCS-601)</p>
+            <p>Subject: Virtualization & Cloud Security (VCS-601)</p>
         </div>
         
         <div class="cover-title">
@@ -299,6 +339,14 @@
 
     <!-- PAGE 2: CERTIFICATE & ACKNOWLEDGEMENTS -->
     <div class="page">
+        <div class="page-header">
+            <div class="header-left">
+                <img src="logo.png" alt="CSE Logo" />
+                <span>Virtualization & Cloud Security</span>
+            </div>
+            <span>Page 2</span>
+        </div>
+        
         <h2 class="chapter-title">Certificate of Originality</h2>
         <p>
             This is to certify that the project report entitled <strong>"Zero-Knowledge Multi-Tenant Vault & Container Isolation Framework"</strong> submitted to the Department of Computer Science is a record of original work carried out by <strong>Pratyush Pandey</strong> under our supervision.
@@ -324,10 +372,23 @@
         <p>
             I am also thankful to our department for providing access to Virtualization & Cloud Security research papers and lab environments, which were essential in validating the threat simulation and CNI isolation models.
         </p>
+
+        <div class="page-footer">
+            <span>Zero-Knowledge Multi-Tenant Cloud Vault</span>
+            <span>Page 2 of 11</span>
+        </div>
     </div>
 
     <!-- PAGE 3: TABLE OF CONTENTS -->
     <div class="page">
+        <div class="page-header">
+            <div class="header-left">
+                <img src="logo.png" alt="CSE Logo" />
+                <span>Virtualization & Cloud Security</span>
+            </div>
+            <span>Page 3</span>
+        </div>
+        
         <h2 class="chapter-title">Table of Contents</h2>
         <table style="width: 100%; border: none;">
             <thead>
@@ -371,10 +432,23 @@
                 </tr>
             </tbody>
         </table>
+
+        <div class="page-footer">
+            <span>Zero-Knowledge Multi-Tenant Cloud Vault</span>
+            <span>Page 3 of 11</span>
+        </div>
     </div>
 
     <!-- PAGE 4: ABSTRACT & INTRODUCTION -->
     <div class="page">
+        <div class="page-header">
+            <div class="header-left">
+                <img src="logo.png" alt="CSE Logo" />
+                <span>Virtualization & Cloud Security</span>
+            </div>
+            <span>Page 4</span>
+        </div>
+        
         <h2 class="chapter-title">Chapter 1: Abstract & Introduction</h2>
         <h3 class="section-subtitle">1.1 Project Abstract</h3>
         <p>
@@ -394,10 +468,23 @@
             <li>To model container segregation networks showing eBPF security policies at namespace limits.</li>
             <li>To build an auditing chain of transaction blocks verified using hash linking pointers.</li>
         </ul>
+
+        <div class="page-footer">
+            <span>Zero-Knowledge Multi-Tenant Cloud Vault</span>
+            <span>Page 4 of 11</span>
+        </div>
     </div>
 
     <!-- PAGE 5: LITERATURE SURVEY -->
     <div class="page">
+        <div class="page-header">
+            <div class="header-left">
+                <img src="logo.png" alt="CSE Logo" />
+                <span>Virtualization & Cloud Security</span>
+            </div>
+            <span>Page 5</span>
+        </div>
+        
         <h2 class="chapter-title">Chapter 2: Literature Survey & Threat Modelling</h2>
         <h3 class="section-subtitle">2.1 Literature Survey & Gaps</h3>
         <p>
@@ -444,10 +531,23 @@
                 </tr>
             </tbody>
         </table>
+
+        <div class="page-footer">
+            <span>Zero-Knowledge Multi-Tenant Cloud Vault</span>
+            <span>Page 5 of 11</span>
+        </div>
     </div>
 
     <!-- PAGE 6: ARCHITECTURAL DESIGN -->
     <div class="page">
+        <div class="page-header">
+            <div class="header-left">
+                <img src="logo.png" alt="CSE Logo" />
+                <span>Virtualization & Cloud Security</span>
+            </div>
+            <span>Page 6</span>
+        </div>
+        
         <h2 class="chapter-title">Chapter 3: Architectural Design & System Flow</h2>
         <h3 class="section-subtitle">3.1 System Core Architecture</h3>
         <p>
@@ -484,10 +584,23 @@
 |  SQLite 3 Database ---> Holds credentials, public keys, and SHA-256 linked audit chains           |
 +---------------------------------------------------------------------------------------------------+
         </div>
+
+        <div class="page-footer">
+            <span>Zero-Knowledge Multi-Tenant Cloud Vault</span>
+            <span>Page 6 of 11</span>
+        </div>
     </div>
 
     <!-- PAGE 7: MATHEMATICAL PROOFS -->
     <div class="page">
+        <div class="page-header">
+            <div class="header-left">
+                <img src="logo.png" alt="CSE Logo" />
+                <span>Virtualization & Cloud Security</span>
+            </div>
+            <span>Page 7</span>
+        </div>
+        
         <h2 class="chapter-title">Chapter 4: Mathematical Formulations & Cryptographic Proofs</h2>
         
         <h3 class="section-subtitle">4.1 Symmetric PBKDF2 Key Derivation</h3>
@@ -531,10 +644,23 @@
         <div class="formula-box">
             K_{aes} = \text{RSA-OAEP-Decrypt}(SK_{bob}, C_{wrapped})
         </div>
+
+        <div class="page-footer">
+            <span>Zero-Knowledge Multi-Tenant Cloud Vault</span>
+            <span>Page 7 of 11</span>
+        </div>
     </div>
 
     <!-- PAGE 8: ZERO TRUST NETWORK -->
     <div class="page">
+        <div class="page-header">
+            <div class="header-left">
+                <img src="logo.png" alt="CSE Logo" />
+                <span>Virtualization & Cloud Security</span>
+            </div>
+            <span>Page 8</span>
+        </div>
+        
         <h2 class="chapter-title">Chapter 5: eBPF Container Segmentation & Zero-Trust Policies</h2>
         <h3 class="section-subtitle">5.1 Micro-segmentation Principles</h3>
         <p>
@@ -569,10 +695,23 @@ if (networkPolicyActive) {
             <img src="network_topology_preview.png" style="width: 100%; max-width: 700px; border: 1.5px solid var(--border); border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);" alt="CNI Isolation Network Map" />
             <p style="font-size: 0.9rem; color: var(--text-muted); text-align: center; font-style: italic; margin-top: 8px;">Figure 3: Zero-Trust Container Network Segmentation Interface & Topology Map</p>
         </div>
+
+        <div class="page-footer">
+            <span>Zero-Knowledge Multi-Tenant Cloud Vault</span>
+            <span>Page 8 of 11</span>
+        </div>
     </div>
 
     <!-- PAGE 9: IMMUTABLE LEDGER -->
     <div class="page">
+        <div class="page-header">
+            <div class="header-left">
+                <img src="logo.png" alt="CSE Logo" />
+                <span>Virtualization & Cloud Security</span>
+            </div>
+            <span>Page 9</span>
+        </div>
+        
         <h2 class="chapter-title">Chapter 6: Blockchain-Style Forensic Ledger Chaining</h2>
         <h3 class="section-subtitle">6.1 Log Chain Structure</h3>
         <p>
@@ -607,10 +746,23 @@ for (const log of logs) {
             <img src="forensics_ledger_preview.png" style="width: 100%; max-width: 700px; border: 1.5px solid var(--border); border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);" alt="Forensic Ledger Scan" />
             <p style="font-size: 0.9rem; color: var(--text-muted); text-align: center; font-style: italic; margin-top: 8px;">Figure 4: Cryptographic Forensic Ledger Integrity Scanner & Tamper Detection</p>
         </div>
+
+        <div class="page-footer">
+            <span>Zero-Knowledge Multi-Tenant Cloud Vault</span>
+            <span>Page 9 of 11</span>
+        </div>
     </div>
 
     <!-- PAGE 10: RESULTS & SCREENSHOTS -->
     <div class="page">
+        <div class="page-header">
+            <div class="header-left">
+                <img src="logo.png" alt="CSE Logo" />
+                <span>Virtualization & Cloud Security</span>
+            </div>
+            <span>Page 10</span>
+        </div>
+        
         <h2 class="chapter-title">Chapter 7: Results, Screenshots, and Verification Metrics</h2>
         
         <h3 class="section-subtitle">7.1 Real-Time Image Decryption Verification</h3>
@@ -631,17 +783,30 @@ for (const log of logs) {
             <p style="font-size: 0.9rem; color: var(--text-muted); text-align: center; font-style: italic; margin-top: 8px;">Figure 2: Key Management Dashboard & Symmetric/Asymmetric Locking Layers</p>
         </div>
         
-        <h3 class="section-subtitle">7.2 Project Evaluation Verification Checklist</h3>
+        <h3 class="section-subtitle">7.3 Project Evaluation Verification Checklist</h3>
         <ol>
             <li><strong>Authentication Validation</strong>: Generates RSA public/private keys and derives PBKDF2 salts inside the browser in under 400ms.</li>
             <li><strong>Decryption Execution</strong>: Fetches the encrypted image payload from the backend, decrypts it locally, and renders the glowing shield icon directly in the UI visualizer.</li>
             <li><strong>Intrusion Verification</strong>: Simulating database modifications immediately invalidates the hash chain, highlighting the tampered block in red.</li>
             <li><strong>Microsegmentation Validation</strong>: Packet flow animations show traffic being blocked or permitted dynamically based on CNI network policy configurations.</li>
         </ol>
+
+        <div class="page-footer">
+            <span>Zero-Knowledge Multi-Tenant Cloud Vault</span>
+            <span>Page 10 of 11</span>
+        </div>
     </div>
 
     <!-- PAGE 11: CONCLUSION -->
     <div class="page">
+        <div class="page-header">
+            <div class="header-left">
+                <img src="logo.png" alt="CSE Logo" />
+                <span>Virtualization & Cloud Security</span>
+            </div>
+            <span>Page 11</span>
+        </div>
+        
         <h2 class="chapter-title">Chapter 8: Conclusion & Future Works</h2>
         <h3 class="section-subtitle">8.1 Conclusion</h3>
         <p>
@@ -657,6 +822,11 @@ for (const log of logs) {
             <li><strong>Zero-Knowledge Search (Homomorphic Encryption)</strong>: Integrate partially homomorphic cryptosystems (such as Paillier) to allow the backend to search metadata without decrypting it.</li>
             <li><strong>Distributed Ledger</strong>: Replicate the audit ledger across multiple cloud nodes using consensus algorithms (e.g. Raft or PBFT) to prevent master ledger erasures.</li>
         </ul>
+
+        <div class="page-footer">
+            <span>Zero-Knowledge Multi-Tenant Cloud Vault</span>
+            <span>Page 11 of 11</span>
+        </div>
     </div>
 
 </div>
