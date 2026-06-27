@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 export default function KeyManager({ user, showToast }) {
   const [revealPrivate, setRevealPrivate] = useState(false);
   const [privateKeyJWK, setPrivateKeyJWK] = useState(null);
+  const [selectedParam, setSelectedParam] = useState('modulus');
 
   useEffect(() => {
     exportPrivateKey();
@@ -205,6 +206,106 @@ export default function KeyManager({ user, showToast }) {
           </div>
         </div>
       </div>
+
+      {/* Cryptographic parameter HUD inspector */}
+      {(() => {
+        let title = '';
+        let desc = '';
+        let value = '';
+        let formula = '';
+        
+        try {
+          const pubKeyObj = JSON.parse(user.rsaPublicKey);
+          if (selectedParam === 'modulus') {
+            title = 'RSA Modulus (n) Parameters';
+            desc = 'The product of two distinct prime factors (p × q). This constitutes the base field modulo arithmetic size for encrypting wrapped file keys.';
+            value = pubKeyObj.n;
+            formula = 'n = p * q (2048-bit length boundary)';
+          } else if (selectedParam === 'exponent') {
+            title = 'RSA Public Exponent (e)';
+            desc = 'Co-prime exponent value utilized during public key math operations. Usually fixed to 65537 for maximum performance and security.';
+            value = pubKeyObj.e;
+            formula = 'gcd(e, phi(n)) = 1 (Typical value: 65537)';
+          } else if (selectedParam === 'salt') {
+            title = 'PBKDF2 Derivation Salt';
+            desc = '128-bit random salt used during browser master key derivation to stretch passwords and prevent offline lookup database attacks.';
+            value = user.salt;
+            formula = 'Salt = Random-Bytes(16)';
+          } else if (selectedParam === 'iv') {
+            title = 'Symmetric Initialization Vector (IV)';
+            desc = 'A non-repeating random value utilized with AES-GCM-256 block cipher to ensure semantic security over physical cipher payloads.';
+            value = user.iv;
+            formula = 'IV = Random-Bytes(12) (96-bit AES-GCM standard)';
+          }
+        } catch (e) {
+          title = 'Cryptographic Parameter Error';
+          value = 'Failed to parse user credentials.';
+        }
+
+        return (
+          <div className="glass-panel" style={{ marginTop: '2rem', padding: '1.8rem', border: '1px solid rgba(6, 182, 212, 0.25)', boxShadow: 'inset 0 0 20px rgba(6, 182, 212, 0.05)', borderRadius: '12px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.2rem', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '0.8rem' }}>
+              <span style={{ fontSize: '0.9rem', fontWeight: 'bold', color: 'var(--accent-cyan)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                📟 CRYPTO KEY PARAMETER INSPECTOR (HUD CONSOLE)
+              </span>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                {['modulus', 'exponent', 'salt', 'iv'].map((param) => (
+                  <button
+                    key={param}
+                    onClick={() => setSelectedParam(param)}
+                    style={{
+                      background: selectedParam === param ? 'var(--accent-cyan)' : 'transparent',
+                      border: `1px solid ${selectedParam === param ? 'var(--accent-cyan)' : 'rgba(255,255,255,0.1)'}`,
+                      color: selectedParam === param ? '#000' : 'var(--text-secondary)',
+                      fontSize: '0.65rem',
+                      fontWeight: 'bold',
+                      padding: '2px 8px',
+                      borderRadius: '4px',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s'
+                    }}
+                  >
+                    {param.toUpperCase()}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '20px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <div>
+                  <label style={{ fontSize: '0.65rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Parameter Name</label>
+                  <h4 style={{ color: '#fff', fontSize: '1rem', marginTop: '3px' }}>{title}</h4>
+                </div>
+                <div>
+                  <label style={{ fontSize: '0.65rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Raw Parameter Hex/Payload</label>
+                  <div style={{ fontSize: '0.8rem', fontFamily: 'var(--font-mono)', color: 'var(--accent-cyan)', background: 'rgba(0,0,0,0.2)', padding: '10px 12px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.05)', marginTop: '4px', wordBreak: 'break-all', maxHeight: '120px', overflowY: 'auto', boxShadow: 'inset 0 0 5px rgba(0,0,0,0.5)' }}>
+                    {value}
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', background: 'rgba(255,255,255,0.01)', border: '1px solid var(--border-glass)', padding: '12px', borderRadius: '8px', justifyContent: 'center' }}>
+                <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}><strong>Parameter Explanation:</strong></div>
+                <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', margin: 0, textAlign: 'left', lineHeight: '1.4' }}>
+                  {desc}
+                </p>
+                <div style={{ fontSize: '0.78rem', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '6px', marginTop: '4px' }}>
+                  <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>Mathematical Formula:</span>
+                  <div style={{ fontFamily: 'var(--font-mono)', color: 'var(--color-warn)', fontSize: '0.75rem', marginTop: '2px' }}>{formula}</div>
+                </div>
+              </div>
+            </div>
+
+            <div style={{ marginTop: '1.2rem', padding: '10px 15px', background: 'rgba(93, 63, 211, 0.05)', border: '1.5px dashed rgba(93, 63, 211, 0.2)', borderRadius: '6px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <span style={{ fontSize: '1rem' }}>🛡️</span>
+              <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', fontFamily: 'var(--font-sans)', lineHeight: '1.4' }}>
+                <strong>Key Segment Isolation Policy:</strong> These values represent local key wrappers. The raw private key exponents never transit outside client-bound memory, verifying the <strong>Zero-Trust</strong> compliance metrics of the hypervisor.
+              </span>
+            </div>
+          </div>
+        );
+      })()}
     </div>
   );
 }
