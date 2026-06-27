@@ -7,6 +7,7 @@ export default function AuditLedger({ token, API_URL, onLogUpdate, showToast }) 
   const [verifiedBlockIds, setVerifiedBlockIds] = useState([]);
   const [tamperedBlockId, setTamperedBlockId] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [selectedLogId, setSelectedLogId] = useState(null);
 
   useEffect(() => {
     fetchLogs();
@@ -20,6 +21,9 @@ export default function AuditLedger({ token, API_URL, onLogUpdate, showToast }) 
       const data = await response.json();
       if (response.ok) {
         setLogs(data);
+        if (data.length > 0) {
+          setSelectedLogId(data[0].id);
+        }
         // Reset verification states
         setVerificationReport(null);
         setVerifiedBlockIds([]);
@@ -177,31 +181,32 @@ export default function AuditLedger({ token, API_URL, onLogUpdate, showToast }) 
 
       {/* Blockchain Integrity Map visualization */}
       {logs.length > 0 && (
-        <div className="glass-panel" style={{ padding: '1.5rem', marginBottom: '2rem', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <div className="glass-panel" style={{ padding: '1.5rem', marginBottom: '1.5rem', display: 'flex', flexDirection: 'column', gap: '12px' }}>
           <h4 style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', margin: 0, textTransform: 'uppercase', letterSpacing: '0.5px' }}>🔗 Hash-Pointer Blockchain Visualization Map</h4>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', overflowX: 'auto', padding: '10px 0' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', overflowX: 'auto', padding: '10px 5px' }}>
             {logs.slice(0, 6).map((log, idx) => {
               const isVerified = verifiedBlockIds.includes(log.id);
               const isCompromised = verificationReport && !verificationReport.report.find(r => r.id === log.id)?.is_valid;
+              const isSelected = selectedLogId === log.id;
               
               let boxColor = 'rgba(255,255,255,0.02)';
-              let borderCol = 'var(--border-glass)';
+              let borderCol = isSelected ? 'var(--accent-cyan)' : 'var(--border-glass)';
               let textColor = 'var(--text-secondary)';
               let statusText = 'PENDING';
 
               if (isVerified && !isCompromised) {
                 boxColor = 'rgba(0, 230, 118, 0.05)';
-                borderCol = 'rgba(0, 230, 118, 0.4)';
+                borderCol = isSelected ? 'var(--accent-cyan)' : 'rgba(0, 230, 118, 0.4)';
                 textColor = 'var(--color-success)';
                 statusText = 'SECURE';
               } else if (isCompromised) {
                 boxColor = 'rgba(255, 23, 68, 0.08)';
-                borderCol = 'var(--color-danger)';
+                borderCol = isSelected ? 'var(--accent-cyan)' : 'var(--color-danger)';
                 textColor = 'var(--color-danger)';
                 statusText = 'TAMPERED';
               } else if (verifying) {
                 boxColor = 'rgba(255, 196, 0, 0.05)';
-                borderCol = 'rgba(255, 196, 0, 0.4)';
+                borderCol = isSelected ? 'var(--accent-cyan)' : 'rgba(255, 196, 0, 0.4)';
                 textColor = '#ffc400';
                 statusText = 'VERIFYING';
               }
@@ -213,17 +218,23 @@ export default function AuditLedger({ token, API_URL, onLogUpdate, showToast }) 
                       {isCompromised ? '⚡' : '➔'}
                     </div>
                   )}
-                  <div style={{ 
-                    flex: '1 0 100px', 
-                    background: boxColor, 
-                    border: `1.5px solid ${borderCol}`, 
-                    borderRadius: '8px', 
-                    padding: '10px', 
-                    textAlign: 'center', 
-                    minWidth: '105px', 
-                    boxShadow: isVerified && !isCompromised ? '0 0 10px rgba(0, 230, 118, 0.1)' : (isCompromised ? '0 0 15px rgba(255, 23, 68, 0.2)' : 'none')
-                  }}>
-                    <div style={{ fontSize: '0.62rem', fontWeight: 'bold', color: 'var(--text-muted)' }}>BLOCK #{log.id}</div>
+                  <div 
+                    onClick={() => setSelectedLogId(log.id)}
+                    style={{ 
+                      flex: '1 0 100px', 
+                      background: boxColor, 
+                      border: isSelected ? '2px solid var(--accent-cyan)' : `1.5px solid ${borderCol}`, 
+                      borderRadius: '8px', 
+                      padding: '12px 10px', 
+                      textAlign: 'center', 
+                      minWidth: '105px', 
+                      cursor: 'pointer',
+                      transform: isSelected ? 'scale(1.05)' : 'scale(1)',
+                      transition: 'all 0.2s ease',
+                      boxShadow: isSelected ? '0 0 15px rgba(6, 182, 212, 0.25)' : (isVerified && !isCompromised ? '0 0 10px rgba(0, 230, 118, 0.1)' : (isCompromised ? '0 0 15px rgba(255, 23, 68, 0.2)' : 'none'))
+                    }}
+                  >
+                    <div style={{ fontSize: '0.62rem', fontWeight: 'bold', color: isSelected ? 'var(--accent-cyan)' : 'var(--text-muted)' }}>BLOCK #{log.id}</div>
                     <div style={{ fontSize: '0.72rem', fontWeight: 800, color: textColor, margin: '4px 0' }}>{statusText}</div>
                     <div style={{ fontSize: '0.55rem', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                       {log.log_hash.substring(0, 8)}...
@@ -235,6 +246,74 @@ export default function AuditLedger({ token, API_URL, onLogUpdate, showToast }) 
           </div>
         </div>
       )}
+
+      {/* Block Details HUD Inspector */}
+      {logs.length > 0 && (() => {
+        const selectedLog = logs.find(l => l.id === selectedLogId) || logs[0];
+        if (!selectedLog) return null;
+        const blockReport = verificationReport?.report.find(r => r.id === selectedLog.id);
+        const isValid = blockReport ? blockReport.is_valid : true;
+        const statusLabel = verificationReport ? (isValid ? '🛡️ VALIDATED' : '🚨 COMPROMISED') : '🔍 UNVERIFIED';
+        const hashColor = verificationReport ? (isValid ? 'var(--color-success)' : 'var(--color-danger)') : 'var(--accent-cyan)';
+        
+        return (
+          <div className="glass-panel" style={{ padding: '1.8rem', marginBottom: '2rem', border: '1px solid rgba(6, 182, 212, 0.25)', boxShadow: 'inset 0 0 20px rgba(6, 182, 212, 0.05)', borderRadius: '12px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.2rem', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '0.8rem' }}>
+              <span style={{ fontSize: '0.9rem', fontWeight: 'bold', color: 'var(--accent-cyan)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                📟 BLOCK INSPECTOR (HUD CONSOLE)
+              </span>
+              <span style={{ fontSize: '0.65rem', fontFamily: 'var(--font-mono)', background: 'rgba(255,255,255,0.05)', padding: '2px 8px', borderRadius: '4px', color: hashColor }}>
+                STATUS: {statusLabel}
+              </span>
+            </div>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '20px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <div>
+                  <label style={{ fontSize: '0.65rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Current Block SHA-256 Hash</label>
+                  <div style={{ fontSize: '0.82rem', fontFamily: 'var(--font-mono)', color: hashColor, background: 'rgba(0,0,0,0.2)', padding: '8px 12px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.05)', marginTop: '4px', wordBreak: 'break-all', boxShadow: 'inset 0 0 5px rgba(0,0,0,0.5)' }}>
+                    {selectedLog.log_hash}
+                  </div>
+                </div>
+                
+                <div>
+                  <label style={{ fontSize: '0.65rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Linked Previous Hash (Hash Pointer)</label>
+                  <div style={{ fontSize: '0.82rem', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', background: 'rgba(0,0,0,0.1)', padding: '8px 12px', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.02)', marginTop: '4px', wordBreak: 'break-all' }}>
+                    {selectedLog.prev_hash || '0000000000000000000000000000000000000000000000000000000000000000 (Genesis Block)'}
+                  </div>
+                </div>
+              </div>
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', background: 'rgba(255,255,255,0.01)', border: '1px solid var(--border-glass)', padding: '12px', borderRadius: '8px' }}>
+                <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}><strong>Block Payload Metadata:</strong></div>
+                <div style={{ fontSize: '0.78rem', display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ color: 'var(--text-secondary)' }}>Event:</span>
+                  <strong style={{ color: '#fff' }}>{selectedLog.event_type}</strong>
+                </div>
+                <div style={{ fontSize: '0.78rem', display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ color: 'var(--text-secondary)' }}>Actor:</span>
+                  <strong style={{ color: '#fff' }}>{selectedLog.username}</strong>
+                </div>
+                <div style={{ fontSize: '0.78rem', display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ color: 'var(--text-secondary)' }}>Timestamp:</span>
+                  <strong style={{ color: 'var(--text-muted)' }}>{new Date(selectedLog.timestamp).toLocaleTimeString()}</strong>
+                </div>
+                <div style={{ fontSize: '0.78rem', display: 'flex', flexDirection: 'column', gap: '3px', marginTop: '6px', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '6px' }}>
+                  <span style={{ color: 'var(--text-secondary)', fontSize: '0.7rem' }}>Details:</span>
+                  <span style={{ color: 'var(--accent-cyan)', fontSize: '0.75rem', fontFamily: 'var(--font-mono)' }}>{selectedLog.details}</span>
+                </div>
+              </div>
+            </div>
+
+            <div style={{ marginTop: '1.2rem', padding: '10px 15px', background: 'rgba(6, 182, 212, 0.05)', border: '1.5px dashed rgba(6, 182, 212, 0.2)', borderRadius: '6px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <span style={{ fontSize: '1rem' }}>🧮</span>
+              <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', fontFamily: 'var(--font-sans)', lineHeight: '1.4' }}>
+                <strong>Verification Equation:</strong> The backend validates this block by verifying: <code style={{ color: 'var(--accent-cyan)', fontFamily: 'var(--font-mono)' }}>SHA-256("{selectedLog.timestamp}|{selectedLog.event_type}|{selectedLog.user_id}|{selectedLog.username}|{selectedLog.details}|" + PrevHash)</code> matches the stored block hash.
+              </span>
+            </div>
+          </div>
+        );
+      })()}
 
       {logs.length === 0 ? (
         <div className="glass-panel" style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
