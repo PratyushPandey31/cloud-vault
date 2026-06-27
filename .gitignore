@@ -1,6 +1,11 @@
 node_modules/
 backend/uploads/*
 !backend/uploads/demo-financials
+backend/vault.db
+backend/vault.db-journal
+*.db
+*.db-journal
+PROJECT_REPORT.pdf
 .system_generated/
 .gemini/
 *.log
